@@ -13,6 +13,9 @@ on:
 
 jobs:
   aws_cdk:
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -23,10 +26,8 @@ jobs:
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@master
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: 'us-east-1'
+          role-to-assume: arn:aws:iam::128680359488:role/ExampleGithubRole
+          aws-region: us-east-1
       - name: Install dependencies
         run: yarn
       - name: Synth stack
